@@ -49,7 +49,7 @@
 
 / {
 	compatible = "amlogic,p200", "amlogic,meson-gxbb";
-	model = "EM95 China TrashBox v0.5";
+	model = "Enybox EM95 TV box";
 
 	avdd18_usb_adc: regulator-avdd18_usb_adc {
 		compatible = "regulator-fixed";
@@ -148,7 +148,7 @@
 			};
 		};
 	};
-	
+
 	hdmi-connector {
 		compatible = "hdmi-connector";
 		type = "a";
@@ -159,6 +159,42 @@
 			};
 		};
 	};*/
+
+	meson-vfd {
+		compatible = "amlogic,aml_vfd";
+		dev_name = "meson-vfd";
+		status = "okay";
+		gpios = <&gpio GPIODV_25 GPIO_ACTIVE_HIGH>,  /* STB */
+				<&gpio GPIODV_27 GPIO_ACTIVE_HIGH>,  /* CLK */
+				<&gpio GPIODV_26 GPIO_ACTIVE_HIGH>;  /* DI/DO */
+		/* [scan code] [linux key code] */
+		key_codes = /bits/ 16
+			    <0x02 KEY_POWER
+			     0x07 KEY_VOLUMEDOWN
+			     0x01 KEY_VOLUMEUP
+			     0x05 KEY_MENU
+			     0x04 KEY_CHANNELUP
+			     0x06 KEY_CHANNELDOWN
+			     0x00 KEY_ENTER>;
+		/* dot LED names */
+		dot_names = "APPS",
+			    "SETUP",
+			    "USB",
+			    "CARD",
+			    ":",
+			    "HDMI",
+			    "CVBS";
+		/* dot LED <16_bit_word bit_number> in raw display buffer ('overlay') */
+		dot_bits = /bits/ 8
+			   <0 3
+			    1 3
+			    2 3
+			    3 3
+			    4 3
+			    5 3
+			    6 3>;
+	};
+
 };
 
 /*&scpi_clocks {

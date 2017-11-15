@@ -31,8 +31,8 @@ echo "Собираю Image modules dtbs"
 make -j4 Image modules dtbs
 
 #Установка ядра
-echo "Устанавливаю Image modules dtbs firmware"
-sudo make install modules_install dtbs_install firmware_install
+echo "Устанавливаю Image modules dtbs"
+sudo make install modules_install dtbs_install
 
 #Создаем пункт загрузки
 k_ver=`make -s kernelrelease`

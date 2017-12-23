@@ -348,9 +348,9 @@ static char boot_anim [][4] = {
 	"b~~t",
 };
 
-void vfd_timer_sr(unsigned long data)
+void vfd_timer_sr(struct timer_list *t)
 {
-	struct vfd_t *vfd = (struct vfd_t *)data;
+	struct vfd_t *vfd = from_timer(vfd, t, timer);;
 
 #ifndef CONFIG_VFD_NO_KEY_INPUT
 	if (vfd->input)
@@ -516,7 +516,7 @@ static int vfd_probe(struct platform_device *pdev)
 	/* display boot animation */
 	vfd->boot_anim = ARRAY_SIZE (boot_anim);
 
-	setup_timer(&vfd->timer, vfd_timer_sr, (unsigned long)vfd);
+	timer_setup(&vfd->timer, vfd_timer_sr, 0);
 	mod_timer(&vfd->timer, jiffies+msecs_to_jiffies(100));
 
 	/* register sysfs attributes */

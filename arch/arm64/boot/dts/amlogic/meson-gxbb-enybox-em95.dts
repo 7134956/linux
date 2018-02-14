@@ -141,7 +141,7 @@
 		clocks = <&wifi32k>;
 		clock-names = "ext_clock";
 	};
-/*
+
 	cvbs_connector: cvbs-connector {
 		compatible = "composite-video-connector";
 
@@ -161,7 +161,7 @@
 				remote-endpoint = <&hdmi_tx_tmds_out>;
 			};
 		};
-	};*/
+	};
 
 	meson-vfd {
 		compatible = "amlogic,aml_vfd";
@@ -200,7 +200,7 @@
 
 };
 
-/*
+
 &cec_AO {
 	status = "okay";
 	pinctrl-0 = <&ao_cec_pins>;
@@ -225,7 +225,7 @@
 		remote-endpoint = <&hdmi_connector_in>;
 	};
 };
-*/
+
 &ir {
 	status = "okay";
 	pinctrl-0 = <&remote_input_ao_pins>;

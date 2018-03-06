@@ -358,7 +358,7 @@
 	snps,reset-delays-us = <0 10000 1000000>;
 	snps,reset-active-low;
 
-	amlogic,tx-delay-ns = <2>;
+	amlogic,tx-delay-ns = <4>;
 
 	mdio {
 		compatible = "snps,dwmac-mdio";

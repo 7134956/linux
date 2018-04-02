@@ -1,0 +1,15 @@
+#
+# Amlogic driver configuration
+#
+menu "Amlogic Device Drivers"
+	depends on ARCH_MESON
+	depends on GPIOLIB
+
+#
+#	Char devices
+#
+comment "Char devices"
+
+source "drivers/amlogic/input/Kconfig"
+
+endmenu

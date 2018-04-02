@@ -188,3 +188,6 @@ obj-$(CONFIG_GNSS)		+= gnss/
 obj-$(CONFIG_INTERCONNECT)	+= interconnect/
 obj-$(CONFIG_COUNTER)		+= counter/
 obj-$(CONFIG_MOST)		+= most/
+
+# Amlogic drivers
+obj-$(CONFIG_ARCH_MESON)        += amlogic/

@@ -30,6 +30,9 @@ read -p "Add debug options to config?(y/N)" -n 1
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     scripts/kconfig/merge_config.sh -r -m .config dev.config
+    BUILD_DEBUG=1
+else
+    export INSTALL_MOD_STRIP=1    #Modules to be stripped after they are installed.
 fi
 
 read -p "Run nconfig?(y/N)" -n 1
@@ -46,21 +49,36 @@ make -j4 Image modules dtbs
 read -p "Make tar? (else install)(Y/n)" -n 1
 if [[ $REPLY =~ ^[Nn]$ ]]; then #Install new linux image, dtbs, modules
 
-echo "Install Image modules dtbs"
-sudo make install modules_install dtbs_install
+    echo "Install Image modules dtbs"
+    sudo make install modules_install dtbs_install
 
-else #Build tar package
+else #Build package
 
 #Make deb packages
 #make -j4 bindeb-pkg KBUILD_DEBARCH=arm64
-_kernver=`make kernelrelease`
-echo ${_kernver}
 
-mkdir -p $INSTALL_PATH
-fakeroot make install modules_install dtbs_install
-cp .config "${INSTALL_PATH}/config-${_kernver}"
-cd ${INSTALL_MOD_PATH}
-tar -cvzf ../linux-${_kernver}.tar.gz *
-cd ..
-rm -R tmp_dir
+    _kernver=`make kernelrelease`
+    echo ${_kernver}
+    mkdir -p ${INSTALL_PATH}
+    fakeroot make install modules_install dtbs_install
+
+    if [ -n "$BUILD_DEBUG" ] ; then
+        echo "Add debug vmlinux to archive"
+        # Different tools want the image in different locations
+        # perf
+        mkdir -p ${INSTALL_MOD_PATH}/usr/lib/debug/lib/modules/${_kernver}/
+        cp vmlinux ${INSTALL_MOD_PATH}/usr/lib/debug/lib/modules/${_kernver}/
+        # systemtap
+        mkdir -p ${INSTALL_MOD_PATH}/usr/lib/debug/boot/
+        ln -s ../lib/modules/${_kernver}/vmlinux ${INSTALL_MOD_PATH}/usr/lib/debug/boot/vmlinux-${_kernver}
+        # kdump-tools
+        ln -s lib/modules/${_kernver}/vmlinux ${INSTALL_MOD_PATH}/usr/lib/debug/vmlinux-${_kernver}
+    fi
+
+    cp .config "${INSTALL_PATH}/config-${_kernver}"
+    cd ${INSTALL_MOD_PATH}
+    tar -cvzf ../linux-${_kernver}.tar.gz *
+    cd ..
+
+    rm -R ${INSTALL_MOD_PATH}
 fi

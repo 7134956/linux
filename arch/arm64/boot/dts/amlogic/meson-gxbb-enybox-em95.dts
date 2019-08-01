@@ -333,6 +333,10 @@
 	phy-handle = <&eth_phy0>;
 	phy-mode = "rgmii";
 
+	snps,reset-gpio = <&gpio GPIOZ_14 0>;
+	snps,reset-delays-us = <0 10000 1000000>;
+	snps,reset-active-low;
+
 	amlogic,tx-delay-ns = <4>;
 
 	mdio {
@@ -343,11 +347,6 @@
 		eth_phy0: ethernet-phy@0 {
 			/* Realtek RTL8211F (0x001cc916) */
 			reg = <0>;
-
-			reset-assert-us = <10000>;
-			reset-deassert-us = <30000>;
-			reset-gpios = <&gpio GPIOZ_14 GPIO_ACTIVE_LOW>;
-
 			interrupt-parent = <&gpio_intc>;
 			interrupts = <29 IRQ_TYPE_LEVEL_LOW>;
 			eee-broken-1000t;
